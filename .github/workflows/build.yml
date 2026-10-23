@@ -1,0 +1,26 @@
+
+name: Build rootless tweak
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Theos
+        uses: Randomblock1/theos-action@v1
+
+      - name: Build rootless .deb
+        run: make clean package FINALPACKAGE=1
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusicCapture17-rootless-deb
+          path: packages/*.deb
+          if-no-files-found: error
