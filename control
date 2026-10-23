@@ -1,0 +1,8 @@
+Package: com.experimental.musiccapture17
+Name: MusicCapture17 (Experimental)
+Version: 0.1.0
+Architecture: iphoneos-arm64
+Depends: mobilesubstrate
+Maintainer: Experimental project
+Section: Tweaks
+Description: Experimental AVPlayer mute workaround during Apple Music screen capture on iOS 17 (rootless).
