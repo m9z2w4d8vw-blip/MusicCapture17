@@ -1,8 +1,14 @@
 
-name: Build rootless tweak
+name: Build and publish rootless DEB
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -18,9 +24,18 @@ jobs:
       - name: Build rootless .deb
         run: make clean package FINALPACKAGE=1
 
-      - name: Upload package
-        uses: actions/upload-artifact@v4
+      - name: Verify .deb was built
+        shell: bash
+        run: |
+          ls -lh packages/*.deb
+          test -n "$(find packages -maxdepth 1 -type f -name '*.deb' -print -quit)"
+
+      - name: Publish direct .deb download
+        uses: softprops/action-gh-release@v3
         with:
-          name: MusicCapture17-rootless-deb
-          path: packages/*.deb
-          if-no-files-found: error
+          tag_name: build-${{ github.run_number }}
+          name: MusicCapture17 build ${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          files: packages/*.deb
+          fail_on_unmatched_files: true
